@@ -27,13 +27,11 @@
         return this.$route.path.indexOf(this.path) > -1
       },
       activeStyle () {
-        console.log(this.activeColor);
         return this.isActive ? {color: this.activeColor} : {}
       }
     },
     methods: {
       itemClick () {
-        console.log(this.activeColor)
         this.$router.push(this.path)
       }
     }
