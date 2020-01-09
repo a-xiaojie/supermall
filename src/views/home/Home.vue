@@ -3,14 +3,16 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
-    <home-swiper :banner="banner"/>
-    <recommend-view :recommend="recommend"/>
-    <feature-view/>
-    <tab-control class="tab-control"
-                 :titles="['流行', '新款', '精选']"
-                 @tabClick="tabClick"
-    />
-    <GoodsList :goods="showGoods"/>
+    <scroll class="content">
+      <home-swiper :banner="banner"/>
+      <recommend-view :recommend="recommend"/>
+      <feature-view/>
+      <tab-control class="tab-control"
+                   :titles="['流行', '新款', '精选']"
+                   @tabClick="tabClick"
+      />
+      <goods-list :goods="showGoods"/>
+    </scroll>
   </div>
 </template>
 
@@ -18,6 +20,7 @@
   import NavBar from 'components/common/navbar/NavBar'
   import TabControl from 'components/content/tabControl/TabControl'
   import GoodsList from 'components/content/goods/GoodsList'
+  import Scroll from 'components/common/scroll/Scroll'
 
   import HomeSwiper from './childComps/HomeSwiper'
   import RecommendView from './childComps/RecommendView'
@@ -34,6 +37,7 @@
       FeatureView,
       TabControl,
       GoodsList,
+      Scroll,
     },
     data () {
       return {
@@ -117,5 +121,9 @@
     position: sticky;
     top: 44px;
     z-index: 9;
+  }
+  .content {
+    height: calc(100vh - 44px - 49px);
+    overflow: hidden;
   }
 </style>
