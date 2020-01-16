@@ -3,16 +3,23 @@
     <nav-bar class="home-nav">
       <div slot="center">购物街</div>
     </nav-bar>
-    <scroll class="content">
+    <scroll class="content"
+            ref="scroll"
+            :probe-type="3"
+            :pull-up-load="true"
+            @scroll="contentScroll"
+            @pullingUp="loadMore"
+    >
       <home-swiper :banner="banner"/>
       <recommend-view :recommend="recommend"/>
       <feature-view/>
       <tab-control class="tab-control"
-                   :titles="['流行', '新款', '精选']"
+                   :titles="['居家', '女装', '食品']"
                    @tabClick="tabClick"
       />
       <goods-list :goods="showGoods"/>
     </scroll>
+    <back-top @click.native="backClick" v-show="isShowBackTop"/>
   </div>
 </template>
 
@@ -21,12 +28,13 @@
   import TabControl from 'components/content/tabControl/TabControl'
   import GoodsList from 'components/content/goods/GoodsList'
   import Scroll from 'components/common/scroll/Scroll'
+  import BackTop from 'components/content/backTop/BackTop'
 
   import HomeSwiper from './childComps/HomeSwiper'
   import RecommendView from './childComps/RecommendView'
   import FeatureView from './childComps/FeatureView'
 
-  import { getHomeMultidata, getHomeGoods } from 'network/home'
+  import { getHomeMultidata, getCatGoods } from 'network/home'
 
   export default {
     name: 'Home',
@@ -38,17 +46,19 @@
       TabControl,
       GoodsList,
       Scroll,
+      BackTop
     },
     data () {
       return {
         banner: [],
         recommend: [],
         goods: {
-          'pop': {page: 1, list: []},
-          'new': {page: 1, list: []},
-          'sell': {page: 1, list: []},
+          '居家': {page: 1, list: []},
+          '女装': {page: 1, list: []},
+          '食品': {page: 1, list: []},
         },
-        currentType: 'pop'
+        currentType: '居家',
+        isShowBackTop: false
       }
     },
     computed: {
@@ -61,28 +71,38 @@
       this.getHomeMultidata()
 
       // 2.请求商品数据
-      this.getHomeGoods('pop')
-      this.getHomeGoods('new')
-      this.getHomeGoods('sell')
+      this.getHomeGoods('居家')
+      this.getHomeGoods('女装')
+      this.getHomeGoods('食品')
     },
     methods: {
       /**
-       * 时间监听相关的方法
+       * 事件监听相关的方法
        */
       tabClick (index) {
         switch (index) {
           case 0:
-            this.currentType = 'pop'
+            this.currentType = '居家'
             break
           case 1:
-            this.currentType = 'new'
+            this.currentType = '女装'
             break
           case 2:
-            this.currentType = 'sell'
+            this.currentType = '食品'
             break
           default:
-            this.currentType = 'pop'
+            this.currentType = '居家'
         }
+      },
+      backClick () {
+        this.$refs.scroll.scrollTo(0, 0)
+      },
+      contentScroll (pos) {
+        this.isShowBackTop = -pos.y > 1000
+      },
+      loadMore () {
+        console.log('上拉加载更多')
+        this.getHomeGoods(this.currentType)
       },
       /**
        * 网络请求相关的方法
@@ -94,10 +114,11 @@
         })
       },
       getHomeGoods (type) {
-        getHomeGoods(type, this.goods[type].page).then(res => {
-          const goodsList = res.data.list;
+        getCatGoods(type, this.goods[type].page).then(res => {
+          const goodsList = res.data.data;
           this.goods[type].list.push(...goodsList)
           this.goods[type].page += 1
+          this.$refs.scroll.finishPullUp();
         })
       },
     }
