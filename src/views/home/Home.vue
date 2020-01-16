@@ -35,6 +35,7 @@
   import FeatureView from './childComps/FeatureView'
 
   import { getHomeMultidata, getCatGoods } from 'network/home'
+  import { debounce } from 'common/utils'
 
   export default {
     name: 'Home',
@@ -74,6 +75,13 @@
       this.getHomeGoods('居家')
       this.getHomeGoods('女装')
       this.getHomeGoods('食品')
+    },
+    mounted() {
+      // 3.监听item中图片加载完成
+      const refresh = debounce(this.$refs.scroll.refresh, 200)
+      this.$bus.$on('itemImageLoad', () => {
+        refresh()
+      })
     },
     methods: {
       /**

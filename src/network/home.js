@@ -23,7 +23,7 @@ export function getCatGoods (category, page) {
     data: {
       page,
       category,
-      size: 10,
+      size: 30,
       "sources":[0,1001,1002,1003,1004,1005,1006,1007,2000,2001,2002,2003]
     }
   })
