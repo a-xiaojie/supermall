@@ -2,8 +2,10 @@
 
 /* :root => 获取根元素html  */
 :root {
-    --color-text: #666;
-    --color-high-text: #ff5777;
+    --color-text1: #282828;
+    --color-text2: #666;
+    --color-text3: #93969d;
+    --color-high-text: #e40501;
     --color-tint: #ff8198;
     --color-background: #fff;
     --font-size: 14px;
