@@ -7,7 +7,7 @@
       class="fixed"
       :titles="['居家', '女装', '食品']"
       @tabClick="tabClick"
-      ref="tabControl"
+      ref="tabControl1"
       v-show="isTabFixed"
     />
     <scroll class="content"
@@ -55,7 +55,7 @@
       TabControl,
       GoodsList,
       Scroll,
-      BackTop
+      BackTop,
     },
     data () {
       return {
@@ -69,7 +69,8 @@
         currentType: '居家',
         isShowBackTop: false,
         tabOffsetTop: 0,
-        isTabFixed: false
+        isTabFixed: false,
+        saveY: 0,
       }
     },
     computed: {
@@ -96,6 +97,13 @@
       // 2.获取tabControl的offsetTop
       // 所有的组件都有一个属性：$el: 用于获取组件中的元素
       // this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop
+    },
+    activated() {
+      this.$refs.scroll.scrollTo(0, this.saveY, 0)
+      this.$refs.scroll.refresh()
+    },
+    deactivated() {
+      this.saveY = this.$refs.scroll.getScrollY()
     },
     methods: {
       /**
