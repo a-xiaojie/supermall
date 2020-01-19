@@ -21,6 +21,13 @@ export function getDetailItems (comId) {
   })
 }
 
+export function getRecommend () {
+  return requestOuer({
+    url: '/product/unite/list/recommand',
+    method: 'post'
+  })
+}
+
 export class Goods {
   constructor(itemInfo) {
     this.sourcePlatType = itemInfo.sourcePlatType;  // 商品平台

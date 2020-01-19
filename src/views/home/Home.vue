@@ -43,7 +43,7 @@
   import FeatureView from './childComps/FeatureView'
 
   import { getHomeMultidata, getCatGoods } from 'network/home'
-  import { debounce } from 'common/utils'
+  import { itemListenerMixin } from 'common/mixin'
 
   export default {
     name: 'Home',
@@ -57,6 +57,7 @@
       Scroll,
       BackTop,
     },
+    mixins: [itemListenerMixin],
     data () {
       return {
         banner: [],
@@ -71,6 +72,7 @@
         tabOffsetTop: 0,
         isTabFixed: false,
         saveY: 0,
+        itemImgListener: null,
       }
     },
     computed: {
@@ -88,22 +90,20 @@
       this.getHomeGoods('食品')
     },
     mounted() {
-      // 1.监听item中图片加载完成
-      const refresh = debounce(this.$refs.scroll.refresh, 200)
-      this.$bus.$on('itemImageLoad', () => {
-        refresh()
-      })
-
-      // 2.获取tabControl的offsetTop
-      // 所有的组件都有一个属性：$el: 用于获取组件中的元素
-      // this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop
     },
     activated() {
+      // 获取tabControl的offsetTop
+      // 所有的组件都有一个属性：$el: 用于获取组件中的元素
+      // this.tabOffsetTop = this.$refs.tabControl.$el.offsetTop
       this.$refs.scroll.scrollTo(0, this.saveY, 0)
       this.$refs.scroll.refresh()
     },
     deactivated() {
+      // 1.保存Y值
       this.saveY = this.$refs.scroll.getScrollY()
+
+      // 2.取消全局事件的监听
+      this.$bus.$off('itemImgLoad', this.itemImgListener)
     },
     methods: {
       /**

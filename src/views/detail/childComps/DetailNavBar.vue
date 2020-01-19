@@ -29,7 +29,7 @@
     },
     data () {
       return {
-        titles: ['商品', '参数', '评论', '推荐'],
+        titles: ['商品', '图文', '推荐'],
         currentIndex: 0,
       }
     },

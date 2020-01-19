@@ -1,10 +1,11 @@
 <template>
   <div id="detail">
     <detail-nav-bar class="detail-nav"/>
-    <scroll class="content">
+    <scroll class="content" ref="scroll">
       <detail-swiper :banner="banners"/>
       <detail-base-info :goods="goods"/>
       <detail-goods-info :goods-info="detailInfo"/>
+      <goods-list :goods="recommends"/>
     </scroll>
   </div>
 </template>
@@ -16,31 +17,31 @@
   import DetailGoodsInfo from './childComps/DetailGoodsInfo'
 
   import Scroll from 'components/common/scroll/Scroll'
+  import GoodsList from 'components/content/goods/GoodsList'
 
-  import { getDetail, Goods, getDetailItems } from 'network/detail'
+  import { getDetail, Goods, getDetailItems, getRecommend } from 'network/detail'
+  import { itemListenerMixin } from 'common/mixin'
 
   export default {
     name: 'Detail',
     components: {
+      GoodsList,
       DetailNavBar,
       DetailSwiper,
       DetailBaseInfo,
       DetailGoodsInfo,
       Scroll,
     },
+    mixins: [itemListenerMixin],
     data () {
       return {
         id: null,
         banners: [],
         goods: {},
-        detailInfo: ''
+        detailInfo: '',
+        recommends: [],
+        itemImgListener: null,
       }
-    },
-    created() {
-      this.id = this.$route.query.id
-
-      this.getDetail()
-      this.getDetailItems()
     },
     methods: {
       getDetail () {
@@ -54,8 +55,25 @@
         getDetailItems(this.id).then(res => {
           this.detailInfo = res.data;
         })
+      },
+      getRecommend () {
+        getRecommend().then(res => {
+          this.recommends = res.data
+        })
       }
-    }
+    },
+    created() {
+      this.id = this.$route.query.id
+
+      this.getDetail()
+      this.getDetailItems()
+      this.getRecommend()
+    },
+    mounted() {
+    },
+    destroyed() {
+      this.$bus.$off('itemImgLoad', this.itemImgListener)
+    },
   }
 </script>
 
