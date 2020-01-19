@@ -40,7 +40,6 @@
         goods: {},
         detailInfo: '',
         recommends: [],
-        itemImgListener: null,
       }
     },
     methods: {

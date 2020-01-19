@@ -5,7 +5,7 @@
     </nav-bar>
     <tab-control
       class="fixed"
-      :titles="['居家', '女装', '食品']"
+      :titles="['女装', '居家', '食品']"
       @tabClick="tabClick"
       ref="tabControl1"
       v-show="isTabFixed"
@@ -21,7 +21,7 @@
       <recommend-view :recommend="recommend"/>
       <feature-view/>
       <tab-control
-        :titles="['居家', '女装', '食品']"
+        :titles="['女装', '居家', '食品']"
         @tabClick="tabClick"
         ref="tabControl2"
       />
@@ -63,16 +63,15 @@
         banner: [],
         recommend: [],
         goods: {
-          '居家': {page: 1, list: []},
           '女装': {page: 1, list: []},
+          '居家': {page: 1, list: []},
           '食品': {page: 1, list: []},
         },
-        currentType: '居家',
+        currentType: '女装',
         isShowBackTop: false,
         tabOffsetTop: 0,
         isTabFixed: false,
         saveY: 0,
-        itemImgListener: null,
       }
     },
     computed: {
