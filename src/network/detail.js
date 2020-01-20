@@ -21,10 +21,15 @@ export function getDetailItems (comId) {
   })
 }
 
-export function getRecommend () {
+export function getRecommend (comId) {
   return requestOuer({
-    url: '/product/unite/list/recommand',
-    method: 'post'
+    url: '/product/unite/list/recommend',
+    method: 'post',
+    data: {
+      comId,
+      page: 0,
+      size: 10
+    }
   })
 }
 

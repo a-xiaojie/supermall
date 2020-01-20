@@ -36,14 +36,13 @@
   import TabControl from 'components/content/tabControl/TabControl'
   import GoodsList from 'components/content/goods/GoodsList'
   import Scroll from 'components/common/scroll/Scroll'
-  import BackTop from 'components/content/backTop/BackTop'
 
   import HomeSwiper from './childComps/HomeSwiper'
   import RecommendView from './childComps/RecommendView'
   import FeatureView from './childComps/FeatureView'
 
   import { getHomeMultidata, getCatGoods } from 'network/home'
-  import { itemListenerMixin } from 'common/mixin'
+  import { itemListenerMixin, backTopMixin } from 'common/mixin'
 
   export default {
     name: 'Home',
@@ -55,9 +54,8 @@
       TabControl,
       GoodsList,
       Scroll,
-      BackTop,
     },
-    mixins: [itemListenerMixin],
+    mixins: [itemListenerMixin, backTopMixin],
     data () {
       return {
         banner: [],
@@ -68,7 +66,6 @@
           '食品': {page: 1, list: []},
         },
         currentType: '女装',
-        isShowBackTop: false,
         tabOffsetTop: 0,
         isTabFixed: false,
         saveY: 0,
@@ -123,12 +120,9 @@
         this.$refs.tabControl1.currentIndex = index
         this.$refs.tabControl2.currentIndex = index
       },
-      backClick () {
-        this.$refs.scroll.scrollTo(0, 0)
-      },
       contentScroll (pos) {
         // 1. 判断BackTop是否显示
-        this.isShowBackTop = -pos.y > 1000
+        this.listenShowBackTop(pos)
 
         // 2. 决定tabControl是否吸顶（position:fixed）
         this.isTabFixed = (-pos.y) > this.tabOffsetTop - this.$refs.navBar.$el.clientHeight

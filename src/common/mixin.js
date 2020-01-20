@@ -1,4 +1,7 @@
 import { debounce } from './utils'
+import BackTop from 'components/content/backTop/BackTop'
+import { BACKTOP_DISTANCE } from 'common/const'
+
 export const itemListenerMixin = {
   data () {
     return {
@@ -16,6 +19,25 @@ export const itemListenerMixin = {
       this.newRefresh()
     }
     this.$bus.$on('itemImageLoad', this.itemImgListener)
-    console.log('我是混入中的内容')
+    // console.log('我是混入中的内容')
   },
+}
+
+export const backTopMixin = {
+  components: {
+    BackTop
+  },
+  data () {
+    return {
+      isShowBackTop: false,
+    }
+  },
+  methods: {
+    backClick () {
+      this.$refs.scroll.scrollTo(0, 0)
+    },
+    listenShowBackTop (pos) {
+      this.isShowBackTop = -pos.y > BACKTOP_DISTANCE
+    }
+  }
 }
