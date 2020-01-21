@@ -46,6 +46,7 @@ export class Goods {
 ${itemInfo.prodName}
 --------------------------
 长按复制框内整段文字，打开【手机淘宝】即可【领取优惠券】并购买${itemInfo.taokePwd}`
+    this.desc = itemInfo.introduce
   }
 }
 
