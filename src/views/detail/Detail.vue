@@ -14,6 +14,7 @@
     </scroll>
     <back-top @click.native="backClick" v-show="isShowBackTop"/>
     <detail-bottom-bar @addToCart="addToCart"/>
+    <toast :message="message" :show="isShowToast"/>
   </div>
 </template>
 
@@ -26,10 +27,12 @@
 
   import Scroll from 'components/common/scroll/Scroll'
   import GoodsList from 'components/content/goods/GoodsList'
+  import Toast from 'components/common/toast/Toast'
 
   import { getDetail, Goods, getDetailItems, getRecommend } from 'network/detail'
   import { itemListenerMixin, backTopMixin } from 'common/mixin'
   import {debounce} from 'common/utils'
+  import { mapActions } from 'vuex'
 
   export default {
     name: 'Detail',
@@ -41,6 +44,7 @@
       DetailGoodsInfo,
       DetailBottomBar,
       Scroll,
+      Toast,
     },
     mixins: [itemListenerMixin, backTopMixin],
     data () {
@@ -52,10 +56,13 @@
         recommends: [],
         themeTopYs: [],
         getThemeTopY: null,
-        currentIndex: 0
+        currentIndex: 0,
+        message: '',
+        isShowToast: false
       }
     },
     methods: {
+      ...mapActions(['addCart']),
       getDetail () {
         getDetail(this.id).then(res => {
           const data = res.data
@@ -125,7 +132,18 @@
         product.id = this.id
 
         // 2. 将商品添加到购物车
-        this.$store.dispatch('addCart', product)
+        // this.$store.dispatch('addCart', product).then(res => {
+        //   console.log(res)
+        // })
+        this.addCart(product).then(res => {
+          this.isShowToast = true
+          this.message = res
+
+          setTimeout(() => {
+            this.isShowToast = false
+            this.message = ''
+          }, 1500)
+        })
       }
     },
     created() {
