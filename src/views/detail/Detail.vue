@@ -14,7 +14,7 @@
     </scroll>
     <back-top @click.native="backClick" v-show="isShowBackTop"/>
     <detail-bottom-bar @addToCart="addToCart"/>
-    <toast :message="message" :show="isShowToast"/>
+<!--    <toast :message="message" :show="isShowToast"/>-->
   </div>
 </template>
 
@@ -27,7 +27,7 @@
 
   import Scroll from 'components/common/scroll/Scroll'
   import GoodsList from 'components/content/goods/GoodsList'
-  import Toast from 'components/common/toast/Toast'
+  // import Toast from 'components/common/toast/Toast'
 
   import { getDetail, Goods, getDetailItems, getRecommend } from 'network/detail'
   import { itemListenerMixin, backTopMixin } from 'common/mixin'
@@ -44,7 +44,7 @@
       DetailGoodsInfo,
       DetailBottomBar,
       Scroll,
-      Toast,
+      // Toast,
     },
     mixins: [itemListenerMixin, backTopMixin],
     data () {
@@ -57,8 +57,8 @@
         themeTopYs: [],
         getThemeTopY: null,
         currentIndex: 0,
-        message: '',
-        isShowToast: false
+        // message: '',
+        // isShowToast: false
       }
     },
     methods: {
@@ -136,13 +136,14 @@
         //   console.log(res)
         // })
         this.addCart(product).then(res => {
-          this.isShowToast = true
-          this.message = res
-
-          setTimeout(() => {
-            this.isShowToast = false
-            this.message = ''
-          }, 1500)
+          this.$toast.show(res)
+          // this.isShowToast = true
+          // this.message = res
+          //
+          // setTimeout(() => {
+          //   this.isShowToast = false
+          //   this.message = ''
+          // }, 1500)
         })
       }
     },
